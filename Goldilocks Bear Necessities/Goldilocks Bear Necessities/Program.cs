@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Goldilocks_Bear_Necessities
 {
@@ -10,44 +7,33 @@ namespace Goldilocks_Bear_Necessities
     {
         const string FILENAME = "input.txt";
 
-        struct Properties
-        {
-            public int weight;
-            public int temperature;
-        }
-
         static void Main()
         {
-            string[] lines = System.IO.File.ReadAllLines(FILENAME);
+            System.IO.StreamReader file = new System.IO.StreamReader(FILENAME);
+            string line;
+            int gWeight = 0;
+            int gTemp = 0;
+            int cWeight, cTemp;
+            int counter = 0;
 
-            Properties goldilocks = loadPropertiesFromLine(lines.ElementAt(0));
-
-            Properties[] chairs = new Properties[lines.Length - 1];
-            for (int i = 0; i >= chairs.Length - 1; i++)
+            while ((line = file.ReadLine()) != null)
             {
-                chairs[i] = loadPropertiesFromLine(lines[i + 1]);
-            }
-            
-            for (int i = 0; i >= chairs.Length; i++)
-            {
-                Properties chair = chairs.ElementAt(i);
-                if (goldilocks.weight < chair.weight && goldilocks.temperature < chair.weight)
+                string[] properties = line.Split(' ');
+                if (counter == 0)
                 {
-                    Console.Write(i+1 + " ");
+                    gWeight = Convert.ToInt16(properties.ElementAt(0));
+                    gTemp = Convert.ToInt16(properties.ElementAt(1));
                 }
+                else
+                {
+                    cWeight = Convert.ToInt16(properties.ElementAt(0));
+                    cTemp = Convert.ToInt16(properties.ElementAt(1));
+
+                    if (gWeight < cWeight && gTemp > cTemp)
+                        Console.Write(counter + " ");
+                }
+                counter++;
             }
-
-            Console.ReadKey();
-            
-        }
-
-        static private Properties loadPropertiesFromLine(string line)
-        {
-            string[] properties = line.Split(' ');
-            Properties tempProp;
-            tempProp.weight = Int32.Parse(properties.ElementAt(0));
-            tempProp.temperature = Int32.Parse(properties.ElementAt(1));
-            return tempProp;
         }
     }
 }
